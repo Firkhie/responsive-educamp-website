@@ -1,0 +1,522 @@
+<?php
+
+$db_name = 'mysql:host=localhost;dbname=contact_db';
+$user_name = 'root';
+$user_password = '';
+
+$conn = new PDO ($db_name, $user_name, $user_password);
+
+if (isset($_POST['send'])) {
+
+  $name = $_POST['name'];
+  $name = filter_var($name, FILTER_SANITIZE_STRING);
+  $email = $_POST['email'];
+  $email = filter_var($email, FILTER_SANITIZE_STRING);
+  $number = $_POST['number'];
+  $number = filter_var($number, FILTER_SANITIZE_STRING);
+  $course = $_POST['course'];
+  $course = filter_var($course, FILTER_SANITIZE_STRING);
+  $gender = $_POST['gender'];
+  $gender = filter_var($gender, FILTER_SANITIZE_STRING);
+
+  $select_contact = $conn->prepare("SELECT * FROM `contact_form` WHERE name=? AND email=? AND number=? AND course=? AND gender=?");
+  $select_contact->execute([$name, $email, $number, $course, $gender]);
+
+  if ($select_contact->rowCount() > 0) {
+    $message[] = 'Message already sent!';
+  } else {
+    $insert_message = $conn->prepare("INSERT INTO `contact_form` (name, email, number, course, gender) VALUES (?, ?, ?, ?, ?)");
+    $insert_message->execute([$name, $email, $number, $course, $gender]);
+    $message[] = 'Message sent successfully!';
+  }
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Educamp.</title>
+
+  <!------------------ CSS FILE LINK ------------------>
+  <link rel="stylesheet" href="./css/style.css">
+
+  <!------------------ FONT AWESOME CDN LINK ------------------>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+  <!------------------ SWIPERJS LINK ------------------>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+</head>
+<body>
+
+<?php
+
+if (isset($message)) {
+  foreach ($message as $message) {
+    echo '
+    <div class="message">
+      <span>'.$message.'</span>
+      <i class="fas fa-times" onclick="this.parentElement.remove()"></i>
+    </div>
+    ';
+  }
+}
+
+?>
+
+  <!------------------ HEADER ------------------>
+  <header class="header">
+
+    <section class="header-section">
+      <a href="#" class="logo">Educamp <i class="fa-solid fa-circle"></i></a>
+  
+      <div class="navbar">
+        <a href="#">Home</a>
+        <a href="#about">About</a>
+        <a href="#course">Course</a>
+        <a href="#tutor">Tutor</a>
+        <a href="#review">Review</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div id="menu-btn" class="fas fa-bars"></div>
+    </section>
+  
+  </header>
+
+  <!------------------ HERO ------------------>
+  <section class="hero">
+
+    <div class="row">
+
+      <!-- ROW 1 -->
+      <div class="content">
+        <h3>Education <span>Bootcamp</span></h3>
+        <a href="#contact" class="btn">Sign Up</a>
+      </div>
+      
+      <!-- ROW 2 -->
+      <div class="image">
+        <img src="./images/pict-hero-1.svg" alt="">
+      </div>
+    </div>
+
+  </section>
+
+  <!------------------ COUNT ------------------>
+  <section class="count">
+
+    <div class="box-container">
+      
+      <!-- BOX 1 -->
+      <div class="box">
+        <i class="fas fa-graduation-cap"></i>
+        <div class="content">
+          <h3>1#</h3>
+          <p>Bootcamp</p>
+        </div>
+      </div>
+
+      <!-- BOX 2 -->
+      <div class="box">
+        <i class="fas fa-user-graduate"></i>
+        <div class="content">
+          <h3>1600+</h3>
+          <p>Alumni</p>
+        </div>
+      </div>
+
+      <!-- BOX 3 -->
+      <div class="box">
+        <i class="fas fa-chalkboard-user"></i>
+        <div class="content">
+          <h3>40+</h3>
+          <p>Tutor</p>
+        </div>
+      </div>
+
+      <!-- BOX 4 -->
+      <div class="box">
+        <i class="fas fa-face-smile"></i>
+        <div class="content">
+          <h3>100%</h3>
+          <p>Satisfaction</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!------------------ ABOUT ------------------>
+  <section class="about" id="about">
+
+    <div class="row">
+
+      <!-- ROW 1 -->
+      <div class="image">
+        <img src="./images/pict-about-1.svg" alt="">
+      </div>
+
+      <!-- ROW 2 -->
+      <div class="content-container">
+        <h2>Why Educamp. Is The Best Coding Bootcamp Training</h2>
+        <p>Educamp. has been proven to produce competent graduates in the industry through the bootcamp program.</p>
+
+        <div class="content">
+          <!-- BOX 1 -->
+          <div class="box">
+            <div class="inside-box">
+              <i class="fa-solid fa-arrow-up-right-dots"></i>
+              <h3>Growth Mindset</h3>
+            </div>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, quidem!</p>
+          </div>
+
+          <!-- BOX 2 -->
+          <div class="box">
+            <div class="inside-box">
+              <i class="fa-solid fa-bullseye"></i>
+              <h3>Relevant Skill</h3>
+            </div>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, quidem!</p>
+          </div>
+
+          <!-- BOX 3 -->
+          <div class="box">
+            <div class="inside-box">
+              <i class="fa-solid fa-briefcase"></i>
+              <h3>Ready To Work</h3>
+            </div>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, quidem!</p>
+          </div>
+
+          <!-- BOX 4 -->
+          <div class="box">
+            <div class="inside-box">
+              <i class="fa-solid fa-network-wired"></i>
+              <h3>Company Connections</h3>
+            </div>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, quidem!</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!------------------ COURSE ------------------>
+  <section class="course" id="course">
+
+    <div class="heading">Our <span>Course</span></div>
+
+    <div class="swiper course-swiper">
+
+      <div class="swiper-wrapper">
+
+        <!-- SLIDE 1 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-course-1.svg" alt="">
+          <h3>Graphic Designer</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, adipisci?</p>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-course-2.svg" alt="">
+          <h3>Data Analyst</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, adipisci?</p>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-course-3.svg" alt="">
+          <h3>Frontend Developer</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, adipisci?</p>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-course-4.svg" alt="">
+          <h3>Data Scientist</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, adipisci?</p>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-course-5.svg" alt="">
+          <h3>Digital Marketing</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, adipisci?</p>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-course-6.svg" alt="">
+          <h3>Backend Developer</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, adipisci?</p>
+        </div>
+      </div>
+
+      <div class="swiper-pagination"></div>
+
+    </div>
+
+  </section>
+
+  <!------------------ TUTOR ------------------>
+  <section class="tutor" id="tutor">
+
+    <div class="heading">Our <span>Tutor</span></div>
+
+    <div class="swiper tutor-swiper">
+
+      <div class="swiper-wrapper">
+        
+        <!-- SLIDE 1 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-tutor-1.jpg" alt="">
+          <div class="social-media">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+          </div>
+          <h3>Jane Doe</h3>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-tutor-2.jpg" alt="">
+          <div class="social-media">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+          </div>
+          <h3>Jane Doe</h3>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-tutor-3.jpg" alt="">
+          <div class="social-media">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+          </div>
+          <h3>John Doe</h3>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-tutor-4.jpg" alt="">
+          <div class="social-media">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+          </div>
+          <h3>John Doe</h3>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-tutor-5.jpg" alt="">
+          <div class="social-media">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+          </div>
+          <h3>John Doe</h3>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="swiper-slide">
+          <img src="./images/pict-tutor-6.jpg" alt="">
+          <div class="social-media">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+          </div>
+          <h3>Jane Doe</h3>
+        </div>
+
+      </div>
+
+      <div class="swiper-pagination"></div>
+
+    </div>
+
+  </section>
+
+  <!------------------ REVIEW ------------------>
+  <section class="review" id="review">
+
+    <div class="heading">Our <span>Review</span></div>
+
+    <div class="swiper review-swiper">
+      
+      <div class="swiper-wrapper">
+        
+        <!-- SLIDE 1 -->
+        <div class="swiper-slide">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit unde distinctio molestias reiciendis similique rerum architecto, possimus aut quod, dolores nostrum temporibus officia sunt corrupti ullam neque, at quidem? Et.</p>
+
+          <div class="user">
+            <img src="./images/pict-review-1.jpg" alt="">
+            <div class="user-info">
+              <h3>John Doe</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="swiper-slide">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit unde distinctio molestias reiciendis similique rerum architecto, possimus aut quod, dolores nostrum temporibus officia sunt corrupti ullam neque, at quidem? Et.</p>
+
+          <div class="user">
+            <img src="./images/pict-review-2.jpg" alt="">
+            <div class="user-info">
+              <h3>John Doe</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="swiper-slide">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit unde distinctio molestias reiciendis similique rerum architecto, possimus aut quod, dolores nostrum temporibus officia sunt corrupti ullam neque, at quidem? Et.</p>
+
+          <div class="user">
+            <img src="./images/pict-review-3.jpg" alt="">
+            <div class="user-info">
+              <h3>John Doe</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="swiper-slide">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit unde distinctio molestias reiciendis similique rerum architecto, possimus aut quod, dolores nostrum temporibus officia sunt corrupti ullam neque, at quidem? Et.</p>
+
+          <div class="user">
+            <img src="./images/pict-review-4.jpg" alt="">
+            <div class="user-info">
+              <h3>John Doe</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="swiper-pagination"></div>
+
+    </div>
+
+  </section>
+
+  <!------------------ CONTACT ------------------>
+  <section class="contact" id="contact">
+
+    <div class="heading">CONTACT <span>US</span></div>
+
+    <div class="row">
+
+      <!-- ROW 1 -->
+      <div class="image">
+        <img src="./images/pict-contact-1.svg" alt="">
+      </div>
+
+      <!-- ROW 2 -->
+      <form action="" method="post">
+        <span>Your Name</span>
+        <input type="text" name="name" class="box" placeholder="Input your name here" required>
+        <span>Your Email</span>
+        <input type="email" name="email" class="box" placeholder="Input your email here" required>
+        <span>Your Number</span>
+        <input type="number" name="number" class="box" placeholder="Input your number here" required>
+        <span>Select Course</span>
+        <select name="course" class="box" required>
+          <option value="" disabled selected>Select the course --</option>
+          <option value="graphic-designer">Graphic Designer</option>
+          <option value="data-analyst">Data Analyst</option>
+          <option value="frontend-developer">Frontend Developer</option>
+          <option value="data-scientist">Data Scientist</option>
+          <option value="digital-marketing">Digital Marketing</option>
+          <option value="backend-developer">Backend Developer</option>
+        </select>
+        <span>Select Gender</span>
+        <div class="radio">
+          <input type="radio" name="gender" id="male" value="male">
+          <label for="male">Male</label>
+          <input type="radio" name="gender" id="female" value="female">
+          <label for="female">Female</label>
+        </div>
+        <input type="submit" name="send" class="btn" value="Send Message">
+      </form>
+
+    </div>
+
+  </section>
+
+  <!------------------ FOOTER ------------------>
+  <footer class="footer">
+
+    <section class="footer-section">
+
+      <div class="social">
+        <a href="#" class="fab fa-facebook-f"></a>
+        <a href="#" class="fab fa-twitter"></a>
+        <a href="#" class="fab fa-linkedin"></a>
+        <a href="#" class="fab fa-instagram"></a>
+        <a href="#" class="fab fa-youtube"></a>
+      </div>
+
+      <div class="credit">Original Design By <span>MWD</span> | Modified By <span>Firdig Alfalakhi</span> | all rights reserved</div>
+    </section>
+
+  </footer>
+
+  <!------------------ SWIPER JS ------------------>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+  <!------------------ JS FILE LINK ------------------>
+  <script src="./js/script.js"></script>
+  
+</body>
+</html>

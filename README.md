@@ -1,7 +1,6 @@
 # Educamp.
 
-This is my first project.
-Landing page for **Educamp.** website using HTML CSS JavaScript and PHP.
+This is my first landing page project website using HTML CSS JavaScript and PHP.
 
 ## Screenshot
 
